@@ -61,7 +61,7 @@ public class ClientEventHandler {
                     MutableComponent formattedTitle = unlockedTitle.getTextComponent(cap.getGenderSetting()).copy();
                     if (clientPlayer.getName().getString().equals(targetPlayerName.getString())) {
                         formattedTitle.withStyle(s -> s.withUnderlined(true)
-                                .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.literal("Click to set as \ndisplay title.")))
+                                .withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.translatable("gui.titles.button.tooltips.set_display_title")))
                                 .withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/titles display " + unlockedTitle.getID().toString())));
                     }
                     component.append(Component.translatable("chat.advancement.append", formattedTitle));

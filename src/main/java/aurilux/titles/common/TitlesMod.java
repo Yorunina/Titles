@@ -56,8 +56,6 @@ public class TitlesMod {
         var forgeBus = MinecraftForge.EVENT_BUS;
         forgeBus.addListener(TitleRegistry::register);
         forgeBus.addListener(this::registerCommands);
-        forgeBus.addListener(ConfigEventHandler::addLoot);
-        forgeBus.addListener(ConfigEventHandler::onVillagerTrades);
         forgeBus.addListener(ConfigEventHandler::onTabListNameFormat);
     }
 

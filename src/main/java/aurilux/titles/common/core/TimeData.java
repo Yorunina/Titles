@@ -2,7 +2,10 @@ package aurilux.titles.common.core;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -42,6 +45,14 @@ public class TimeData {
 
     public Date getDate() {
         return new Date(realTime);
+    }
+
+    public MutableComponent getFormattedTime() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String formattedTime = dateFormat.format(this.getDate());
+        long gameTimeTicks = this.getGameTime();
+        double hours = (double) gameTimeTicks / (3600 * 20);
+        return Component.translatable("gui.titles.button.tooltips.time_info", formattedTime, String.format("%.1f", hours));
     }
 
     /**

@@ -32,5 +32,6 @@
   "itemGroup.titles": "头衔",
   "key.titles.openTitleSelection": "打开头衔选择屏幕",
   "ftbquests.reward.titles.title": "解锁头衔",
-  "ftbquests.reward.titles.title.titleId": "头衔ID"
+  "ftbquests.reward.titles.title.titleId": "头衔ID",
+  "gui.titles.button.tooltips.set_display_title": "点击设置显示头衔"
 }

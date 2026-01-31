@@ -62,8 +62,8 @@ public class TitlesCapability {
         return obtainedTitles;
     }
 
-    public TimeData getObtainTime(Title title) {
-        return titleObtainTimes.get(title.getID().toString());
+    public TimeData getObtainTime(ResourceLocation titleId) {
+        return titleObtainTimes.get(titleId.toString());
     }
 
     public void setDisplayTitle(Title newTitle) {

@@ -291,11 +291,12 @@ public class TitleSelectionScreen extends Screen {
             int row = i / NUM_COLS;
             int x = leftOffset + (titleButtonWidth * col);
             int y = buttonTitleRowStart + (row * buttonHeight);
-            TitleButton button = addRenderableWidget(new TitleButton(x, y, titleButtonWidth, buttonHeight, titlesToDisplay.get(i),
+            Title title = titlesToDisplay.get(i);
+            TitleButton button = addRenderableWidget(new TitleButton(x, y, titleButtonWidth, buttonHeight, title,
                     temporaryGender, b -> temporaryTitle = ((TitleButton) b).getTitle()));
 
             // Set obtain time if available
-            TimeData obtainTime = cap.getObtainTime(titlesToDisplay.get(i));
+            TimeData obtainTime = cap.getObtainTime(title.getID());
             if (obtainTime != null) {
                 button.setObtainTime(obtainTime);
             }
@@ -344,16 +345,8 @@ public class TitleSelectionScreen extends Screen {
             tooltipLines.add(Component.translatable(flavorText));
         }
 
-        // Add obtain time if available
         if (obtainTime != null) {
-            // Format the real time
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            String formattedTime = dateFormat.format(obtainTime.getDate());
-
-            // Convert game time to hours, minutes, seconds
-            long gameTimeTicks = obtainTime.getGameTime();
-            double hours = (double) gameTimeTicks / (3600 * 20);
-            tooltipLines.add(Component.translatable("gui.titles.button.tooltips.time_info", formattedTime, String.format("%.1f", hours)).withStyle(ChatFormatting.DARK_GRAY));
+            tooltipLines.add(obtainTime.getFormattedTime().withStyle(ChatFormatting.DARK_GRAY));
         }
 
         if (tooltipLines.isEmpty()) {

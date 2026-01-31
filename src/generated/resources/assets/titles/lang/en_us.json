@@ -47,5 +47,6 @@
   "itemGroup.titles": "titles",
   "key.titles.openTitleSelection": "Open Title Selection Screen",
   "ftbquests.reward.titles.title": "Unlock Title",
-  "ftbquests.reward.titles.title.titleId": "Title ID"
+  "ftbquests.reward.titles.title.titleId": "Title ID",
+  "gui.titles.button.tooltips.set_display_title": "Click to set as \ndisplay title."
 }

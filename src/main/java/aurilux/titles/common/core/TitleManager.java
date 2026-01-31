@@ -86,6 +86,10 @@ public class TitleManager {
         return TitleManager.getAllTitles().getOrDefault(id, Title.NULL_TITLE);
     }
 
+    public static TimeData getTimeData(Player player, ResourceLocation id) {
+        return getCapability(player).map(cap -> cap.getObtainTime(id)).orElse(null);
+    }
+
     public static void doIfPresent(Player player, NonNullConsumer<TitlesCapability> toDo) {
         getCapability(player).ifPresent(toDo);
     }
