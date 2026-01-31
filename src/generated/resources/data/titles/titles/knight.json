@@ -1,8 +1,0 @@
-{
-  "type": "loot",
-  "defaultDisplay": "Knight",
-  "flavorText": "...in shining armor",
-  "id": "titles:knight",
-  "isPrefix": true,
-  "rarity": "rare"
-}

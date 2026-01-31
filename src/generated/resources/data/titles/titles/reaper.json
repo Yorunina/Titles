@@ -1,8 +1,0 @@
-{
-  "type": "loot",
-  "defaultDisplay": "the Reaper",
-  "flavorText": "Don't fear it",
-  "id": "titles:reaper",
-  "isPrefix": false,
-  "rarity": "rare"
-}

@@ -1,5 +1,5 @@
-import groovy.json.JsonSlurper
 import groovy.json.JsonOutput
+import groovy.json.JsonSlurper
 
 buildscript {
     repositories {
@@ -64,6 +64,12 @@ repositories {
 
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+    implementation fg.deobf("curse.maven:ftb-quests-forge-289412:4816382")
+    implementation fg.deobf("curse.maven:ftb-library-forge-404465:4720056")
+
+    implementation fg.deobf("curse.maven:architectury-forge-419699:5137938")
+    implementation fg.deobf("curse.maven:rhino-416294:6186971")
+    implementation fg.deobf("curse.maven:kubejs-forge-238086:5853326")
 
     repos.each { n, l ->
         compileOnly fg.deobf(l.lib + ":api")
@@ -205,13 +211,13 @@ curseforge {
     }
 }
 
-modrinth {
-    token = findProperty('modrinth_token') ?: 0
-    projectId = "${modrinth_id}"
-    versionName = "${archivesBaseName} ${version}";
-    versionNumber = version
-    uploadFile = jar
-    changelog = file('changelog.txt').text
-    additionalFiles = [srcJar, apiJar]
-    gameVersions = ["${minecraft_version}"]
-}
+//modrinth {
+//    token = findProperty('modrinth_token') ?: 0
+//    projectId = "${modrinth_id}"
+//    versionName = "${archivesBaseName} ${version}";
+//    versionNumber = version
+//    uploadFile = jar
+//    changelog = file('changelog.txt').text
+//    additionalFiles = [srcJar, apiJar]
+//    gameVersions = ["${minecraft_version}"]
+//}

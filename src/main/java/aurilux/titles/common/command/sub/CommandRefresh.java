@@ -13,8 +13,6 @@ import net.minecraft.advancements.Advancement;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.PlayerAdvancements;
-import net.minecraft.server.level.ServerPlayer;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -39,7 +37,7 @@ public class CommandRefresh {
                         .collect(Collectors.toCollection(ArrayList::new));
                 allAdvancements.forEach(advancement -> {
                             TitlesMod.LOG.debug("Re-awarding title for advancement {}", advancement.getId());
-                            cap.add(TitleManager.getTitle(advancement.getId()));
+                            cap.add(TitleManager.getTitle(advancement.getId()), player.level().getGameTime());
                         });
                 ctx.getSource().sendSuccess(() -> Component.literal("Finished refreshing advancement titles!"), true);
                 TitlesNetwork.toPlayer(new PacketSyncTitlesCapability(cap.serializeNBT()), player);

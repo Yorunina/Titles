@@ -6,13 +6,13 @@ import aurilux.titles.client.gui.button.SimpleButtonOverride;
 import aurilux.titles.client.gui.button.TitleButton;
 import aurilux.titles.client.gui.button.ToggleImageButton;
 import aurilux.titles.common.TitlesMod;
+import aurilux.titles.common.core.TimeData;
 import aurilux.titles.common.core.TitleManager;
 import aurilux.titles.common.core.TitlesCapability;
 import aurilux.titles.common.network.TitlesNetwork;
 import aurilux.titles.common.network.messages.PacketSyncDisplayTitle;
 import aurilux.titles.common.network.messages.PacketSyncGenderSetting;
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
@@ -26,7 +26,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import javax.annotation.Nonnull;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -192,8 +192,7 @@ public class TitleSelectionScreen extends Screen {
                 }
             }
             return true;
-        }
-        else if (Keybinds.openTitleSelection.matches(keyCode, scanCode)
+        } else if (Keybinds.openTitleSelection.matches(keyCode, scanCode)
                 || getMinecraft().options.keyInventory.matches(keyCode, scanCode)) {
             exitScreen(false);
             return true;
@@ -211,8 +210,7 @@ public class TitleSelectionScreen extends Screen {
                 }
             }
             return true;
-        }
-        else {
+        } else {
             return super.charTyped(codePoint, modifiers);
         }
     }
@@ -237,7 +235,7 @@ public class TitleSelectionScreen extends Screen {
         String finalRarityFilter = rarityFilter;
         // TODO implement a binary search tree to make this better/faster(/stronger)?
         titlesListFiltered = titlesListCache.stream()
-                .filter(t -> t.getModid().startsWith(finalModFilter))
+                .filter(t -> t.getModId().startsWith(finalModFilter))
                 .filter(t -> {
                     String rarityName = t.getRarity().name();
                     for (String letter : finalRarityFilter.split("")) {
@@ -276,14 +274,12 @@ public class TitleSelectionScreen extends Screen {
         // Make some page buttons inactive
         if (page == 1) {
             backButtons.forEach(b -> b.active = false);
-        }
-        else {
+        } else {
             backButtons.forEach(b -> b.active = true);
         }
         if (maxIndex == titlesListFiltered.size()) {
             forwardButtons.forEach(b -> b.active = false);
-        }
-        else {
+        } else {
             forwardButtons.forEach(b -> b.active = true);
         }
 
@@ -297,9 +293,17 @@ public class TitleSelectionScreen extends Screen {
             int y = buttonTitleRowStart + (row * buttonHeight);
             TitleButton button = addRenderableWidget(new TitleButton(x, y, titleButtonWidth, buttonHeight, titlesToDisplay.get(i),
                     temporaryGender, b -> temporaryTitle = ((TitleButton) b).getTitle()));
-            String titleButtonFlavorText = button.getTitle().getFlavorText();
-            if (button.active && !StringUtil.isNullOrEmpty(titleButtonFlavorText)) {
-                button.setTooltip(Tooltip.create(Component.translatable(titleButtonFlavorText)));
+
+            // Set obtain time if available
+            TimeData obtainTime = cap.getObtainTime(titlesToDisplay.get(i));
+            if (obtainTime != null) {
+                button.setObtainTime(obtainTime);
+            }
+
+            // Create tooltip with flavor text and obtain time
+            Component tooltip = createTooltip(button.getTitle(), obtainTime);
+            if (button.active && tooltip != null) {
+                button.setTooltip(Tooltip.create(tooltip));
             }
             titleButtons.add(button);
         }
@@ -319,9 +323,49 @@ public class TitleSelectionScreen extends Screen {
     private void chooseRandomTitle() {
         if (titlesListFiltered.size() <= 0) {
             temporaryTitle = Title.NULL_TITLE;
-        }
-        else {
+        } else {
             temporaryTitle = titlesListFiltered.get(player.level().random.nextInt(titlesListFiltered.size()));
         }
+    }
+
+    /**
+     * Creates a tooltip component for a title, including flavor text and obtain time if available.
+     *
+     * @param title      The title to create the tooltip for
+     * @param obtainTime The time when the title was obtained, or null if not available
+     * @return The tooltip component
+     */
+    private Component createTooltip(Title title, TimeData obtainTime) {
+        List<Component> tooltipLines = new ArrayList<>();
+
+        // Add flavor text if available
+        String flavorText = title.getFlavorText();
+        if (!StringUtil.isNullOrEmpty(flavorText)) {
+            tooltipLines.add(Component.translatable(flavorText));
+        }
+
+        // Add obtain time if available
+        if (obtainTime != null) {
+            // Format the real time
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String formattedTime = dateFormat.format(obtainTime.getDate());
+
+            // Convert game time to hours, minutes, seconds
+            long gameTimeTicks = obtainTime.getGameTime();
+            double hours = (double) gameTimeTicks / (3600 * 20);
+            tooltipLines.add(Component.translatable("gui.titles.button.tooltips.time_info", formattedTime, String.format("%.1f", hours)).withStyle(ChatFormatting.DARK_GRAY));
+        }
+
+        if (tooltipLines.isEmpty()) {
+            return null;
+        }
+
+        // Combine all lines into a single component
+        Component result = tooltipLines.get(0);
+        for (int i = 1; i < tooltipLines.size(); i++) {
+            result = result.copy().append("\n").append(tooltipLines.get(i));
+        }
+
+        return result;
     }
 }

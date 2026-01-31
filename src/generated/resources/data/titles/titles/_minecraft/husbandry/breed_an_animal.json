@@ -1,7 +1,0 @@
-{
-  "type": "advancement",
-  "defaultDisplay": "title.titles.minecraft.husbandry.breed_an_animal",
-  "id": "titles:_minecraft/husbandry/breed_an_animal",
-  "isPrefix": true,
-  "rarity": "common"
-}

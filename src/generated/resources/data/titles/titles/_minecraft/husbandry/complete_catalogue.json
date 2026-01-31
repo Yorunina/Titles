@@ -1,7 +1,0 @@
-{
-  "type": "advancement",
-  "defaultDisplay": "title.titles.minecraft.husbandry.complete_catalogue",
-  "id": "titles:_minecraft/husbandry/complete_catalogue",
-  "isPrefix": false,
-  "rarity": "rare"
-}

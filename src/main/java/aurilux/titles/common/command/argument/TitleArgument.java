@@ -4,7 +4,6 @@ import aurilux.titles.api.Title;
 import aurilux.titles.client.ClientOnlyMethods;
 import aurilux.titles.common.TitlesMod;
 import aurilux.titles.common.core.TitleManager;
-import aurilux.titles.common.core.TitleRegistry;
 import com.google.gson.JsonObject;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.ArgumentType;

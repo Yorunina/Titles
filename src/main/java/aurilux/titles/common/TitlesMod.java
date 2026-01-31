@@ -4,15 +4,17 @@ import aurilux.titles.common.command.CommandTitles;
 import aurilux.titles.common.core.TitleRegistry;
 import aurilux.titles.common.core.TitlesCapability;
 import aurilux.titles.common.core.TitlesConfig;
-import aurilux.titles.common.data.*;
+import aurilux.titles.common.data.ItemModelGen;
+import aurilux.titles.common.data.LangGen;
+import aurilux.titles.common.data.RecipeGen;
+import aurilux.titles.common.data.TagGen;
 import aurilux.titles.common.handler.ConfigEventHandler;
 import aurilux.titles.common.init.ModArgumentTypes;
 import aurilux.titles.common.init.ModCreativeTabs;
 import aurilux.titles.common.init.ModItems;
 import aurilux.titles.common.network.TitlesNetwork;
-import net.minecraft.network.chat.Component;
+import aurilux.titles.compat.ftbq.rewards.FTBRewardTypes;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.data.event.GatherDataEvent;
@@ -22,7 +24,6 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -50,7 +51,7 @@ public class TitlesMod {
 
     private void commonSetup(FMLCommonSetupEvent event) {
         TitlesNetwork.init();
-        TitleRegistry.get().loadContributors();
+        FTBRewardTypes.init();
 
         var forgeBus = MinecraftForge.EVENT_BUS;
         forgeBus.addListener(TitleRegistry::register);
@@ -73,8 +74,6 @@ public class TitlesMod {
         gen.addProvider(event.includeClient(), new LangGen(packoutput));
         gen.addProvider(event.includeClient(), new ItemModelGen(packoutput, fileHelper));
 
-        gen.addProvider(event.includeServer(), new TitlesGen(packoutput));
-        gen.addProvider(event.includeServer(), new AdvancementGen(packoutput, lookup, fileHelper));
         gen.addProvider(event.includeServer(), new RecipeGen(packoutput));
         gen.addProvider(event.includeServer(), new TagGen.BlockTags(packoutput, lookup, fileHelper));
     }

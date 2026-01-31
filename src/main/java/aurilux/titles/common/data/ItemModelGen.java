@@ -3,7 +3,6 @@ package aurilux.titles.common.data;
 import aurilux.titles.common.TitlesMod;
 import aurilux.titles.common.init.ModItems;
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 

@@ -43,7 +43,7 @@ public class CommandAddRemove {
             }
 
             if (commandType.equals(CommandType.add)) {
-                cap.add(title);
+                cap.add(title, player.level().getGameTime());
                 response[0] = Component.translatable("commands.titles.add", formattedTitle, player.getName());
             }
             else if (commandType.equals(CommandType.remove)) {

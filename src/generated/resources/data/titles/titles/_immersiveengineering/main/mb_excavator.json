@@ -1,7 +1,0 @@
-{
-  "type": "advancement",
-  "defaultDisplay": "title.titles.immersiveengineering.main.mb_excavator",
-  "id": "titles:_immersiveengineering/main/mb_excavator",
-  "isPrefix": true,
-  "rarity": "rare"
-}

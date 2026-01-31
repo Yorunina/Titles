@@ -1,7 +1,0 @@
-{
-  "type": "loot",
-  "defaultDisplay": "Journeyman",
-  "id": "titles:journeyman",
-  "isPrefix": true,
-  "rarity": "uncommon"
-}

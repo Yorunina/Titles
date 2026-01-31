@@ -1,7 +1,0 @@
-{
-  "type": "loot",
-  "defaultDisplay": "Apprentice",
-  "id": "titles:apprentice",
-  "isPrefix": true,
-  "rarity": "common"
-}

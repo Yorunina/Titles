@@ -1,8 +1,0 @@
-{
-  "type": "advancement",
-  "defaultDisplay": "title.titles.minecraft.adventure.kill_a_mob",
-  "id": "titles:_minecraft/adventure/kill_a_mob",
-  "isPrefix": true,
-  "rarity": "common",
-  "variantDisplay": "title.titles.minecraft.adventure.kill_a_mob.variant"
-}

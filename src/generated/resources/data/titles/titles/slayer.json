@@ -1,7 +1,0 @@
-{
-  "type": "loot",
-  "defaultDisplay": "the Slayer",
-  "id": "titles:slayer",
-  "isPrefix": false,
-  "rarity": "uncommon"
-}

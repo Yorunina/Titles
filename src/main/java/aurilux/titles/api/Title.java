@@ -35,8 +35,7 @@ public class Title {
     private final MutableComponent variantComponent;
     private final String flavorText;
 
-    // This is private to follow the Builder Pattern. Since the Builder makes the object, it doesn't need to be public
-    private Title(Builder builder) {
+    public Title(Builder builder) {
         type = builder.getType();
         isPrefix = builder.isPrefix();
         id = builder.getID();
@@ -63,7 +62,7 @@ public class Title {
     public ResourceLocation getID() {
         return id;
     }
-    public String getModid() {
+    public String getModId() {
         return modid;
     }
     public Rarity getRarity() {

@@ -1,7 +1,0 @@
-{
-  "type": "advancement",
-  "defaultDisplay": "title.titles.pincushion",
-  "id": "titles:pincushion",
-  "isPrefix": true,
-  "rarity": "uncommon"
-}

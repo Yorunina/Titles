@@ -1,7 +1,0 @@
-{
-  "type": "advancement",
-  "defaultDisplay": "title.titles.minecraft.husbandry.bred_all_animals",
-  "id": "titles:_minecraft/husbandry/bred_all_animals",
-  "isPrefix": true,
-  "rarity": "rare"
-}

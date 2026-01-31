@@ -1,8 +1,0 @@
-{
-  "type": "advancement",
-  "defaultDisplay": "title.titles.frigid",
-  "flavorText": "title.titles.frigid.flavor",
-  "id": "titles:frigid",
-  "isPrefix": false,
-  "rarity": "common"
-}

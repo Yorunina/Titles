@@ -1,7 +1,7 @@
 package aurilux.titles.client.gui.button;
 
 import aurilux.titles.api.Title;
-import com.mojang.blaze3d.vertex.PoseStack;
+import aurilux.titles.common.core.TimeData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Style;
@@ -13,6 +13,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
 public class TitleButton extends SimpleButtonOverride {
     private final Title title;
+    private TimeData obtainTime;
 
     public TitleButton(int x, int y, int width, int height, Title t, boolean isMasculine, OnPress action) {
         super(x, y, width, height, t.getTextComponent(isMasculine), action);
@@ -21,6 +22,14 @@ public class TitleButton extends SimpleButtonOverride {
 
     public Title getTitle() {
         return title;
+    }
+
+    public void setObtainTime(TimeData timeData) {
+        this.obtainTime = timeData;
+    }
+
+    public TimeData getObtainTime() {
+        return obtainTime;
     }
 
     @Override

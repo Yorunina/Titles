@@ -11,28 +11,30 @@ import java.util.function.Supplier;
 
 public class PacketSyncUnlockedTitle {
     private final ResourceLocation titleKey;
+    private final long gameTime;
 
-    public PacketSyncUnlockedTitle(ResourceLocation titleKey) {
+    public PacketSyncUnlockedTitle(ResourceLocation titleKey, long gameTime) {
         this.titleKey = titleKey;
+        this.gameTime = gameTime;
     }
 
     public static void encode(PacketSyncUnlockedTitle msg, FriendlyByteBuf buf) {
         buf.writeUtf(msg.titleKey.toString());
+        buf.writeLong(msg.gameTime);
     }
 
     public static PacketSyncUnlockedTitle decode(FriendlyByteBuf buf) {
-        return new PacketSyncUnlockedTitle(new ResourceLocation(buf.readUtf()));
+        return new PacketSyncUnlockedTitle(new ResourceLocation(buf.readUtf()), buf.readLong());
     }
 
     public static void handle(PacketSyncUnlockedTitle msg, Supplier<NetworkEvent.Context> ctx) {
         ctx.get().enqueueWork(new Runnable() {
-            // Have to use anon class instead of lambda or else we'll get classloading issues
             @Override
             public void run() {
                 Player player = Minecraft.getInstance().player;
                 if (player != null) {
                     TitleManager.doIfPresent(player, cap ->
-                            cap.add(TitleManager.getTitle(msg.titleKey)));
+                            cap.add(TitleManager.getTitle(msg.titleKey), msg.gameTime));
                 }
             }
         });

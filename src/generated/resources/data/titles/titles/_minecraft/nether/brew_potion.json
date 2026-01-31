@@ -1,7 +1,0 @@
-{
-  "type": "advancement",
-  "defaultDisplay": "title.titles.minecraft.nether.brew_potion",
-  "id": "titles:_minecraft/nether/brew_potion",
-  "isPrefix": true,
-  "rarity": "common"
-}

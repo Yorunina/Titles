@@ -18,8 +18,8 @@ import java.util.stream.Collectors;
 public class TitleManager {
     public static void unlockTitle(ServerPlayer player, ResourceLocation titleKey) {
         doIfPresent(player, cap -> {
-            if (cap.add(getTitle(titleKey))) {
-                TitlesNetwork.toPlayer(new PacketSyncUnlockedTitle(titleKey), player);
+            if (cap.add(getTitle(titleKey), player.level().getGameTime())) {
+                TitlesNetwork.toPlayer(new PacketSyncUnlockedTitle(titleKey, player.level().getGameTime()), player);
             }
         });
     }
@@ -51,7 +51,12 @@ public class TitleManager {
 
     private static Map<ResourceLocation, Title> flatten(Map<Title.AwardType, Map<ResourceLocation, Title>> mapToFlatten) {
         return mapToFlatten.values().stream()
-                .flatMap(map -> map.entrySet().stream())
+                .flatMap(map -> {
+                   if (map == null) {
+                       return new HashMap<ResourceLocation, Title>().entrySet().stream();
+                   }
+                   return map.entrySet().stream();
+                })
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 

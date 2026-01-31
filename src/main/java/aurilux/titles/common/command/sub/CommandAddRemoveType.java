@@ -16,7 +16,9 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.server.command.EnumArgument;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class CommandAddRemoveType {
     private enum CommandType {
@@ -69,7 +71,7 @@ public class CommandAddRemoveType {
                 }
                 titlesToAdd.forEach(title -> {
                     TitlesMod.LOG.debug("Adding title {}", title);
-                    cap.add(TitleManager.getTitle(title.getID()));
+                    cap.add(TitleManager.getTitle(title.getID()), player.level().getGameTime());
                 });
                 response[0] = Component.translatable("commands.titles.addtype", scope.name(), player.getName());
             }

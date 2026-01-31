@@ -3,6 +3,7 @@ package aurilux.titles.common.core;
 import aurilux.titles.api.Title;
 import aurilux.titles.common.TitlesMod;
 import aurilux.titles.common.network.messages.PacketSyncDatapack;
+import aurilux.titles.compat.kubejs.events.TitleRegistryEventJS;
 import com.google.gson.*;
 import net.minecraft.DefaultUncaughtExceptionHandler;
 import net.minecraft.resources.ResourceLocation;
@@ -27,10 +28,12 @@ import java.time.Month;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static aurilux.titles.compat.kubejs.Plugin.TITLE_REGISTRY;
+
 public class TitleRegistry extends SimpleJsonResourceReloadListener {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
 
-    private final Map<Title.AwardType, Map<ResourceLocation, Title>> titles = new HashMap<>();
+    public final Map<Title.AwardType, Map<ResourceLocation, Title>> titles = new HashMap<>();
 
     private static final TitleRegistry INSTANCE = new TitleRegistry();
 
@@ -88,11 +91,13 @@ public class TitleRegistry extends SimpleJsonResourceReloadListener {
                 ResourceLocation processedLocation = processTemplateResource(location, modsWithNativeTitles);
                 Title title = loadTitle(processedLocation, element.getAsJsonObject());
                 titles.computeIfAbsent(title.getType(), k -> new HashMap<>()).put(processedLocation, title);
-            }
-            catch (IllegalArgumentException | JsonParseException ex) {
+            } catch (IllegalArgumentException | JsonParseException ex) {
                 TitlesMod.LOG.error("Parsing error loading title {}: {}", location, ex.getMessage());
             }
         });
+        TitleRegistryEventJS kjsEvent = new TitleRegistryEventJS();
+        TITLE_REGISTRY.post(kjsEvent);
+        kjsEvent.titles.forEach(pTitle -> titles.computeIfAbsent(pTitle.getType(), k -> new HashMap<>()).put(pTitle.getID(), pTitle));
         TitlesMod.LOG.debug("Loaded {} titles", titles.size());
 
         profilerIn.pop();
@@ -155,43 +160,5 @@ public class TitleRegistry extends SimpleJsonResourceReloadListener {
             titles.computeIfAbsent(title.getType(), k -> new HashMap<>()).put(res, title);
         }
         TitlesMod.LOG.debug("Synced {} titles from server", titles.size());
-    }
-
-    public void loadContributors() {
-        Thread thread = new Thread(this::fetchContributors);
-        thread.setName("Titles Contributor Title Thread");
-        thread.setDaemon(true);
-        thread.setUncaughtExceptionHandler(new DefaultUncaughtExceptionHandler(TitlesMod.LOG));
-        thread.start();
-    }
-
-    private void fetchContributors() {
-        try {
-            URL url = new URL("https://raw.githubusercontent.com/Aurilux/Titles/master/contributors.properties");
-            Properties props = new Properties();
-            InputStreamReader reader = new InputStreamReader(url.openStream());
-            props.load(reader);
-            createContributorTitles(props);
-        }
-        catch (IOException e) {
-            TitlesMod.LOG.info("Unable to load contributors list. Most likely you're offline or github is down.");
-        }
-    }
-
-    private void createContributorTitles(Properties props) {
-        Title.Builder contributorBuilder = Title.Builder.create(TitlesMod.MOD_ID)
-                .type(Title.AwardType.CONTRIBUTOR)
-                .rarity(Rarity.EPIC);
-
-        Map<ResourceLocation, Title> contributorTitles = new HashMap<>();
-        for(String contributorName : props.stringPropertyNames()) {
-            String contributorTitle = props.getProperty(contributorName);
-            contributorBuilder.id(TitlesMod.prefix(contributorName.toLowerCase(Locale.ROOT)))
-                    .defaultDisplay(contributorTitle);
-            Title title = contributorBuilder.build();
-            contributorTitles.put(title.getID(), title);
-        }
-        titles.put(Title.AwardType.CONTRIBUTOR, contributorTitles);
-        TitlesMod.LOG.info("Loaded {} contributor titles", contributorTitles.size());
     }
 }
